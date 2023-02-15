@@ -39,6 +39,7 @@ notes.txt
 *.pyc
 __pycache__
 db.sqlite3
+backend/.pytest_cache/
 
 npm-debug.log*
 yarn-debug.log*
