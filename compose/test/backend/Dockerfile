@@ -1,10 +1,17 @@
-FROM node:alpine
-RUN apk add --no-cache bash
-WORKDIR /app
-COPY ./backend/package.json ./
+FROM python:3.9-slim-buster
 
-RUN npm i -g ts-node typescript
-RUN npm install
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+RUN apt-get update \
+    && apt-get install -y build-essential \
+    && apt-get install -y libpq-dev \
+    && apt-get install -y gettext \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY ./backend/requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
 
 COPY ./compose/test/backend/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//g' /entrypoint.sh
@@ -13,5 +20,7 @@ RUN chmod +x /entrypoint.sh
 COPY ./compose/test/backend/start.sh /start.sh
 RUN sed -i 's/\r$//g' /start.sh
 RUN chmod +x /start.sh
+
+WORKDIR /app
 
 ENTRYPOINT ["/entrypoint.sh"]

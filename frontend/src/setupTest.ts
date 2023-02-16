@@ -29,6 +29,7 @@ export const users = [
 
 const API_HOST = '/api/v1';
 process.env.API_HOST = API_HOST;
+process.env.API_HOST_LOCAL = API_HOST;
 
 // Mock server for both client fetch and server side fetch
 const server = setupServer(

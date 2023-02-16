@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+    backend:
+        build:
+            context: .
+            dockerfile: ./compose/test/backend/Dockerfile
+        command: /start.sh
+        volumes:
+            - ./backend:/app
+
+    frontend:
+        build:
+            context: .
+            dockerfile: ./compose/test/frontend/Dockerfile
+        command: /start.sh
+        volumes:
+            - /app/node_modules
+            - ./frontend:/app
