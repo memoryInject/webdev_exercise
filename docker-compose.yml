@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+    backend:
+        build:
+            context: .
+            dockerfile: ./compose/local/backend/Dockerfile
+        command: /start.sh
+        volumes:
+            - ./backend:/app
+        ports:
+            - 8000:8000
+
+    frontend:
+        build:
+            context: .
+            dockerfile: ./compose/local/frontend/Dockerfile
+        command: /start.sh
+        volumes:
+            - /app/node_modules
+            - ./frontend:/app
+        environment:
+          - API_HOST=http://backend:8000/api/v1
+        ports:
+            - 3000:3000
+        depends_on:
+            - backend
