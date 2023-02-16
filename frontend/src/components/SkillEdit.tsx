@@ -56,6 +56,7 @@ const SkillEdit = ({ user: { skills, id }, update }: Props) => {
             onSubmit={(e) => submitHandler(e)}
           >
             <Form.Control
+              data-testid="skill-text"
               type="text"
               placeholder="Add Skill"
               className="me-2"
@@ -63,7 +64,11 @@ const SkillEdit = ({ user: { skills, id }, update }: Props) => {
               value={addText}
               onChange={(e) => setAddText(e.target.value)}
             />
-            <Button type="submit" variant="outline-info">
+            <Button
+              type="submit"
+              data-testid="skill-add-btn"
+              variant="outline-info"
+            >
               Add
             </Button>
           </Form>

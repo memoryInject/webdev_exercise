@@ -3,7 +3,7 @@ import { Form, Button, Container, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
-type UserData = {
+export type UserData = {
   id: number;
   username: string;
   email: string;
@@ -65,6 +65,7 @@ const UserCreationForm = () => {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Username</Form.Label>
           <Form.Control
+            data-testid="form-username"
             type="text"
             placeholder="Username"
             required
@@ -79,6 +80,7 @@ const UserCreationForm = () => {
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
+            data-testid="form-email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -93,6 +95,7 @@ const UserCreationForm = () => {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>First Name</Form.Label>
           <Form.Control
+            data-testid="form-firstname"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             type="text"
@@ -104,6 +107,7 @@ const UserCreationForm = () => {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Last Name</Form.Label>
           <Form.Control
+            data-testid="form-lastname"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             type="text"
@@ -113,6 +117,7 @@ const UserCreationForm = () => {
         </Form.Group>
 
         <Button
+          data-testid="form-submit"
           variant="primary"
           type="submit"
           className="w-100"
