@@ -24,4 +24,4 @@ def get_users_by_query_filter(query_params: Dict) -> QuerySet[User]:
         elif val:
             users = users.filter(**{f"{key}__{match_criteria}": f"{val}"})
 
-    return users
+    return users.distinct()

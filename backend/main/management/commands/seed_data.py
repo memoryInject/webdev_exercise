@@ -18,12 +18,17 @@ class Command(BaseCommand):
 
     @transaction.atomic
     def handle(self, *args, **kwargs):
-        # Create a superuser
-        admin = User.objects.create_superuser(
-            username="admin", email="admin@example.com"
-        )
-        admin.set_password("1234")
-        admin.save()
+        print("Data seeding started...")
+        # Try to build a superuser
+        try:
+            # Create a superuser
+            admin = User.objects.create_superuser(
+                username="admin", email="admin@example.com"
+            )
+            admin.set_password("1234")
+            admin.save()
+        except Exception as e:
+            print("Admin user already exists in the database!")
 
         # Create all the users
         people = []
@@ -35,3 +40,4 @@ class Command(BaseCommand):
         for _ in range(NUM_SKILLS):
             users = random.choices(people, k=USERS_PER_SKILL)
             SkillFactory.create(users=users)
+        print("Data seeding completed.")

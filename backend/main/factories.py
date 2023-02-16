@@ -1,4 +1,5 @@
 import factory
+
 from factory.django import DjangoModelFactory
 from django.contrib.auth.models import User
 from .models import Skill
@@ -8,6 +9,7 @@ from .models import Skill
 class UserFactory(DjangoModelFactory):
     class Meta:
         model = User
+        django_get_or_create = ("username",)
 
     username = factory.Faker("first_name")
     first_name = factory.Faker("first_name")
@@ -19,6 +21,7 @@ class UserFactory(DjangoModelFactory):
 class SkillFactory(DjangoModelFactory):
     class Meta:
         model = Skill
+        django_get_or_create = ("skill_name",)
 
     skill_name = factory.Faker("job")
 
