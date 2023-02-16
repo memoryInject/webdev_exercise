@@ -27,8 +27,8 @@ const UserSearch = () => {
   const queryNames = ['username', 'firstname', 'email', 'skill'];
 
   // Set the search and filter when there is a query exists
+  // TODO: Refactor if checks with hash table lookup
   useEffect(() => {
-    // console.log('Set search params')
     if (Object.keys(router.query)) {
       if (router.query.exact) {
         setChecked(true);
@@ -58,15 +58,12 @@ const UserSearch = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log('checked', checked);
-    // console.log('radios', radioValue);
-    // console.log('searchText', searchText);
 
     if (searchText) {
       let url = '/users/?';
       url += `${queryNames[parseInt(radioValue) - 1]}=${searchText}`;
       url += `${checked ? '&exact=true' : ''}`;
-      // console.log('url', url);
+
       router.push(url);
     } else {
       router.push('/users');

@@ -16,7 +16,12 @@ export type UserData = {
   skills: string[];
 };
 
-export const getUsersUrl = process.env.API_HOST + '/users/';
+export let getUsersUrl = process.env.API_HOST + '/users/';
+
+// Check if running on browser we need to check this for docker for development
+if (typeof window !== 'undefined') {
+  getUsersUrl = process.env.API_HOST_LOCAL + '/users/';
+}
 
 const buildUrl = (baseUrl: string, query: ParsedUrlQuery): string => {
   let url = baseUrl;
@@ -42,7 +47,7 @@ export const getServerSideProps: GetServerSideProps<{
   data: UserData[];
 }> = async ({ query }) => {
   const url = buildUrl(getUsersUrl, query);
-  console.log(url);
+  console.log('GET', url);
   const { data } = await axios.get(url);
 
   return {
@@ -56,9 +61,10 @@ const Users = ({
   data,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
+
   const [update, setUpdate] = useState(false);
   const [users, setUsers] = useState<typeof data>(data);
-  // console.log(users);
+
   const { query } = router;
 
   // Force update user list from client if delete a user
@@ -67,10 +73,7 @@ const Users = ({
     if (update) {
       setUpdate(false);
       const url = buildUrl(getUsersUrl, query);
-      // console.log('Update triggerd', update);
-      // console.log('Url-users', url);
       try {
-        // console.log('axios triggered');
         axios.get<typeof data>(url).then((res) => setUsers(res.data));
       } catch (error) {
         console.log(error);

@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps<{
 }> = async ({ params }) => {
   let url = `${getUsersUrl}${params!.userId}/`;
 
-  console.log(url);
+  console.log('GET', url);
   const { data } = await axios.get(url);
 
   return {
@@ -37,13 +37,11 @@ const UserId = ({
   const { userId } = router.query;
   const [update, setUpdate] = useState(false);
   const [user, setUser] = useState<typeof data>(data);
-  // console.log(data);
 
   // Force to refetch data if user update skills
   useEffect(() => {
     if (update) {
       setUpdate(false);
-      // console.log('Update triggerd', update);
       try {
         axios
           .get<typeof data>(`/api/users/${userId}`)

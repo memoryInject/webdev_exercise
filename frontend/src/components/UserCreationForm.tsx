@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Alert, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
@@ -19,10 +19,12 @@ const UserCreationForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage('');
+    setLoading(true);
     try {
       const { data } = await axios.post<UserData>('/api/users', {
         username,
@@ -34,6 +36,8 @@ const UserCreationForm = () => {
     } catch (err) {
       console.log(err);
       setErrorMessage((err as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -108,8 +112,13 @@ const UserCreationForm = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="w-100">
-          Submit
+        <Button
+          variant="primary"
+          type="submit"
+          className="w-100"
+          disabled={loading}
+        >
+          Submit {loading && <Spinner size="sm" />}
         </Button>
       </Form>
     </Container>

@@ -27,7 +27,6 @@ const UserItemList = ({ users, update }: Props) => {
   // Delete user and update the user list
   useEffect(() => {
     if (deleteConfirm) {
-      console.log(deleteUserId);
       try {
         axios.delete(`/api/users/${deleteUserId}`).then((_res) => update(true));
       } catch (error) {
@@ -41,7 +40,6 @@ const UserItemList = ({ users, update }: Props) => {
   };
 
   const deleteHandler = async (userId: number) => {
-    // console.log(userId);
     setDeleteUserId(userId);
     setShowConfirm(true);
   };

@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  ListGroup,
-  Container,
-  Row,
-  Col,
-  Badge,
-  Form,
-  Button,
-} from 'react-bootstrap';
+import { Container, Row, Col, Badge, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 type UserData = {
@@ -29,7 +21,6 @@ const SkillEdit = ({ user: { skills, id }, update }: Props) => {
 
   const removeHandler = async (skill: string) => {
     const filteredSkills = skills.filter((s) => s !== skill);
-    // console.log(filteredSkills);
     try {
       await axios.put(`/api/users/${id}`, { skills: filteredSkills });
       update(true);
@@ -41,7 +32,6 @@ const SkillEdit = ({ user: { skills, id }, update }: Props) => {
   const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const newSkills = [...skills, addText];
-    // console.log(newSkills);
     try {
       await axios.put(`/api/users/${id}`, { skills: newSkills });
       update(true);
