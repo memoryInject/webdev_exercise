@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserCreationForm, { UserData } from '../UserCreationForm';
 import axios from 'axios';
+import { ResponseData } from '@/pages/users';
 
 vi.mock('next/router', () => ({
   useRouter() {
@@ -28,7 +29,7 @@ test('create a new user', async () => {
   expect(screen.getByText(/Create User/)).toBeDefined();
 
   // Before submit check the number of users
-  const { data: beforeData } = await axios.get<UserData[]>(
+  const { data: beforeData } = await axios.get<ResponseData>(
     `${process.env.API_HOST}/users/`
   );
 
@@ -54,8 +55,8 @@ test('create a new user', async () => {
   await new Promise((r) => setTimeout(r, 100));
 
   // After submit check the number of users
-  const { data: afterData } = await axios.get<UserData[]>(
+  const { data: afterData } = await axios.get<ResponseData>(
     `${process.env.API_HOST}/users/`
   );
-  expect(afterData.length).toEqual(beforeData.length + 1);
+  expect(afterData.results.length).toEqual(beforeData.results.length + 1);
 });

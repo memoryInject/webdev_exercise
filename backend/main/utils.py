@@ -1,10 +1,9 @@
-from typing import Dict
-
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
+from django.http import QueryDict
 
 
-def get_users_by_query_filter(query_params: Dict) -> QuerySet[User]:
+def get_users_by_query_filter(query_params: QueryDict) -> QuerySet[User]:
     queries = {
         "username": query_params.get("username"),
         "first_name": query_params.get("firstname"),
@@ -24,4 +23,4 @@ def get_users_by_query_filter(query_params: Dict) -> QuerySet[User]:
         elif val:
             users = users.filter(**{f"{key}__{match_criteria}": f"{val}"})
 
-    return users.distinct()
+    return users.distinct().order_by('id')

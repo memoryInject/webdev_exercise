@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/extend-expect';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node';
+import { PaginationData } from './pages/users';
 
 export const users = [
   {
@@ -35,6 +36,26 @@ export const users = [
   },
 ];
 
+export const pagination: PaginationData = {
+  count: 3,
+  page: {
+    size: 5,
+    count: 3, 
+    total: 1,
+    current: 1,
+    next: null,
+    previous: null,
+  },
+  query_param: {
+    next: null,
+    previous: null,
+  },
+  links: {
+    next: null,
+    previous: null,
+  }
+}
+
 const API_HOST = '/api/v1';
 process.env.API_HOST = API_HOST;
 process.env.API_HOST_LOCAL = API_HOST;
@@ -58,7 +79,10 @@ interface User {
 // Mock server for both client fetch and server side fetch
 const server = setupServer(
   rest.get(`${API_HOST}/users/`, (_req, res, ctx) => {
-    return res(ctx.json(users));
+    return res(ctx.json({
+      pagination,
+      results: users,
+    }));
   }),
 
   rest.get(`${API_HOST}/users/:id`, (req, res, ctx) => {

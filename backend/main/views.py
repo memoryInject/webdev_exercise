@@ -7,6 +7,7 @@ from rest_framework.response import Response
 
 from .serializers import UserSerializer
 from .utils import get_users_by_query_filter
+from .pagination import Pagination
 
 
 @api_view(["GET", "POST"])
@@ -15,10 +16,12 @@ def user_list(request: Request, format=None) -> Response:
     List all users with query filter or Create new user
     """
     if request.method == "GET":
+        paginator = Pagination()
         users = get_users_by_query_filter(request.query_params)
+        result_page = paginator.paginate_queryset(users, request)
 
-        serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        serializer = UserSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     if request.method == "POST":
         serializer = UserSerializer(data=request.data)

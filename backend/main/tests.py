@@ -153,8 +153,8 @@ def test_get_all_users(api_client: APIClient, create_user):
     response = api_client.get(url)
 
     assert response.status_code == 200
-    assert len(response.data) == len(user_names)
-    assert response.data[0]["username"] in user_names
+    assert len(response.data.get('results')) == len(user_names)
+    assert response.data.get('results')[0]["username"] in user_names
 
 
 @pytest.mark.django_db
@@ -170,8 +170,8 @@ def test_get_all_users_by_username(api_client: APIClient, create_user):
     ]
 
     assert response.status_code == 200
-    assert len(response.data) == len(filter_user_names)
-    assert response.data[0].get("username") in filter_user_names
+    assert len(response.data.get('results')) == len(filter_user_names)
+    assert response.data.get('results')[0].get("username") in filter_user_names
 
 
 @pytest.mark.django_db
@@ -189,8 +189,8 @@ def test_get_all_users_by_firstname(api_client: APIClient, create_user):
     ]
 
     assert response.status_code == 200
-    assert len(response.data) == len(filter_first_names)
-    assert response.data[0].get("first_name") in filter_first_names
+    assert len(response.data.get('results')) == len(filter_first_names)
+    assert response.data.get('results')[0].get("first_name") in filter_first_names
 
 
 @pytest.mark.django_db
@@ -208,8 +208,8 @@ def test_get_all_users_by_email(api_client: APIClient, create_user):
     ]
 
     assert response.status_code == 200
-    assert len(response.data) == len(filter_email)
-    assert response.data[0].get("email") in filter_email
+    assert len(response.data.get('results')) == len(filter_email)
+    assert response.data.get('results')[0].get("email") in filter_email
 
 
 @pytest.mark.django_db
@@ -222,20 +222,20 @@ def test_get_all_users_by_skill(api_client: APIClient, create_user):
     response = api_client.get(url + "?skill=" + search_query)
 
     assert response.status_code == 200
-    assert len(response.data) == 0
+    assert len(response.data.get('results')) == 0
 
     # Add skill to users
     users = api_client.get(url)
 
-    url = reverse("user-detail", kwargs={"pk": users.data[0].get("id")})
+    url = reverse("user-detail", kwargs={"pk": users.data.get('results')[0].get("id")})
     data = {"skills": ["python", "typescript"]}
     response = api_client.put(url, data, format="json")
 
-    url = reverse("user-detail", kwargs={"pk": users.data[1].get("id")})
+    url = reverse("user-detail", kwargs={"pk": users.data.get('results')[1].get("id")})
     data = {"skills": ["python"]}
     response = api_client.put(url, data, format="json")
 
-    url = reverse("user-detail", kwargs={"pk": users.data[2].get("id")})
+    url = reverse("user-detail", kwargs={"pk": users.data.get('results')[2].get("id")})
     data = {"skills": ["typescript", "javascript"]}
     response = api_client.put(url, data, format="json")
 
@@ -245,11 +245,11 @@ def test_get_all_users_by_skill(api_client: APIClient, create_user):
     response = api_client.get(url + "?skill=" + search_query)
 
     assert response.status_code == 200
-    assert len(response.data) == 2
+    assert len(response.data.get('results')) == 2
 
     url = reverse("user-list")
     search_query = "java"
     response = api_client.get(url + "?skill=" + search_query)
 
     assert response.status_code == 200
-    assert len(response.data) == 1
+    assert len(response.data.get('results')) == 1

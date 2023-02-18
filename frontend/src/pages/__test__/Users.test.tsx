@@ -1,6 +1,6 @@
 import { expect, test, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Users, { UserData, getUsersUrl } from '../users';
+import Users, { ResponseData, getUsersUrl } from '../users';
 import axios from 'axios';
 
 import { users } from '../../setupTest';
@@ -25,7 +25,7 @@ vi.mock('next/router', () => ({
 
 test('show list of users', async () => {
   // Mock getServerSideProps
-  const { data } = await axios.get<UserData[]>(getUsersUrl);
+  const { data } = await axios.get<ResponseData>(getUsersUrl);
 
   render(<Users data={data} />);
 
